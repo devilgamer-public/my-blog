@@ -1,4 +1,4 @@
-import { firebaseConfig, ADMIN_EMAIL, EMAILJS_CONFIG } from './firebase-config.js';
+import { firebaseConfig, ADMIN_EMAIL, EMAILJS_CONFIG } from './firebase-config.local.js';
 
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);

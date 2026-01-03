@@ -24,7 +24,12 @@ A dynamic blog with Firebase backend, Google authentication, and email subscript
 
 ### 2. Configure Firebase
 
-Edit `firebase-config.js` with your Firebase credentials:
+Copy the template and fill in your credentials:
+```bash
+cp firebase-config.template.js firebase-config.local.js
+```
+
+Edit `firebase-config.local.js` with your Firebase credentials:
 
 ```javascript
 const firebaseConfig = {
@@ -79,7 +84,7 @@ For subscriber notifications:
 1. Go to [EmailJS](https://www.emailjs.com/)
 2. Create account and email service
 3. Create email template with variables: `to_email`, `blog_title`, `blog_url`, `from_name`
-4. Update `firebase-config.js` with your EmailJS credentials
+4. Update `firebase-config.local.js` with your EmailJS credentials
 
 ### 5. Deploy to Cloudflare Pages
 
@@ -106,11 +111,12 @@ python3 -m http.server 8080
 ├── category.html       # Posts in a category
 ├── post.html           # Single post view
 ├── contact.html        # Contact page
-├── admin.html          # Admin panel (create/edit posts)
-├── style.css           # Styles
-├── app.js              # Firebase logic
-├── firebase-config.js  # Configuration (edit this!)
-├── firestore.rules     # Security rules
+├── admin.html                  # Admin panel (create/edit posts)
+├── style.css                   # Styles
+├── app.js                      # Firebase logic
+├── firebase-config.template.js # Config template (commit this)
+├── firebase-config.local.js    # Your actual config (gitignored)
+├── firestore.rules             # Security rules
 └── README.md
 ```
 
