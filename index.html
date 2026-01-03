@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jaswanth Suvvari's Blog - Thoughts on software development, technology, and engineering">
+  <meta name="author" content="Jaswanth Suvvari">
+  <title>Blog | Jaswanth Suvvari</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="home">
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <header>
+    <nav aria-label="Main navigation">
+      <a href="/" class="logo">JS<span class="sr-only"> - Jaswanth Suvvari's Blog</span></a>
+      <ul>
+        <li><a href="https://jaswanth.dev">Portfolio</a></li>
+        <li><a href="/" aria-current="page">Blog</a></li>
+        <li><a href="/categories.html">Categories</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+      <div class="auth-section">
+        <span id="user-info" style="display:none;"></span>
+        <button id="auth-btn" class="btn btn-small">Sign In</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <article class="intro">
+      <h1>Blog</h1>
+      <p>
+        Thoughts on software engineering, system design, backend development, 
+        and lessons learned building scalable applications.
+      </p>
+      <a href="/admin.html" class="btn btn-primary admin-only" style="display:none;">+ New Post</a>
+    </article>
+
+    <section aria-labelledby="posts-heading">
+      <h2 id="posts-heading" class="sr-only">Recent Posts</h2>
+      
+      <noscript>
+        <p class="noscript-notice">
+          JavaScript is required to load dynamic blog content. 
+          Alternatively, contact me at <a href="mailto:jaswanth.suvvari@devilgamer.in">jaswanth.suvvari@devilgamer.in</a>
+        </p>
+      </noscript>
+      
+      <div id="blogs-container">
+        <p class="loading">Loading blogs...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      <a href="https://github.com/Jassu-Jaswanth">GitHub</a> · 
+      <a href="https://linkedin.com/in/jaswanth-suvvari">LinkedIn</a> · 
+      <a href="mailto:jaswanth.suvvari@devilgamer.in">Email</a>
+    </p>
+    <p><small>© 2025 Jaswanth Suvvari</small></p>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <!-- Marked for Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- App -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

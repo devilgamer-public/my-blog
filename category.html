@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blog posts in category">
+  <meta name="author" content="Jaswanth Suvvari">
+  <title>Category | Jaswanth Suvvari</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="category">
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <header>
+    <nav aria-label="Main navigation">
+      <a href="/" class="logo">JS</a>
+      <ul>
+        <li><a href="https://jaswanth.dev">Portfolio</a></li>
+        <li><a href="/">Blog</a></li>
+        <li><a href="/categories.html">Categories</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+      <div class="auth-section">
+        <span id="user-info" style="display:none;"></span>
+        <button id="auth-btn" class="btn btn-small">Sign In</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <a href="/categories.html" class="back-link">← All Categories</a>
+    
+    <article class="intro">
+      <h1 id="category-title">Category</h1>
+    </article>
+
+    <section aria-labelledby="posts-heading">
+      <h2 id="posts-heading" class="sr-only">Posts in this category</h2>
+      
+      <div id="blogs-container">
+        <p class="loading">Loading posts...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      <a href="https://github.com/Jassu-Jaswanth">GitHub</a> · 
+      <a href="https://linkedin.com/in/jaswanth-suvvari">LinkedIn</a> · 
+      <a href="mailto:jaswanth.suvvari@devilgamer.in">Email</a>
+    </p>
+    <p><small>© 2025 Jaswanth Suvvari</small></p>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

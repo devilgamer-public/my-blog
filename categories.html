@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse blog posts by category">
+  <meta name="author" content="Jaswanth Suvvari">
+  <title>Categories | Jaswanth Suvvari</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="categories">
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <header>
+    <nav aria-label="Main navigation">
+      <a href="/" class="logo">JS</a>
+      <ul>
+        <li><a href="https://jaswanth.dev">Portfolio</a></li>
+        <li><a href="/">Blog</a></li>
+        <li><a href="/categories.html" aria-current="page">Categories</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+      <div class="auth-section">
+        <span id="user-info" style="display:none;"></span>
+        <button id="auth-btn" class="btn btn-small">Sign In</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <article class="intro">
+      <h1>Categories</h1>
+      <p>Browse posts by topic.</p>
+    </article>
+
+    <section aria-labelledby="categories-heading">
+      <h2 id="categories-heading" class="sr-only">All Categories</h2>
+      
+      <noscript>
+        <p class="noscript-notice">JavaScript is required to load categories.</p>
+      </noscript>
+      
+      <div id="categories-container">
+        <p class="loading">Loading categories...</p>
+      </div>
+      
+      <div class="admin-only" style="display:none; margin-top: 2rem;">
+        <h3>Add Category</h3>
+        <form id="add-category-form" class="inline-form">
+          <input type="text" id="category-name" placeholder="Category name" required>
+          <input type="text" id="category-desc" placeholder="Description (optional)">
+          <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      <a href="https://github.com/Jassu-Jaswanth">GitHub</a> · 
+      <a href="https://linkedin.com/in/jaswanth-suvvari">LinkedIn</a> · 
+      <a href="mailto:jaswanth.suvvari@devilgamer.in">Email</a>
+    </p>
+    <p><small>© 2025 Jaswanth Suvvari</small></p>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module">
+    document.getElementById('add-category-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('category-name').value.trim();
+      const desc = document.getElementById('category-desc').value.trim();
+      if (name && window.createCategory) {
+        await window.createCategory(name, desc);
+        location.reload();
+      }
+    });
+  </script>
+</body>
+</html>

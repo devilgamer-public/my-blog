@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Admin - Create and edit blog posts">
+  <meta name="author" content="Jaswanth Suvvari">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin | Jaswanth Suvvari</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="admin">
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <header>
+    <nav aria-label="Main navigation">
+      <a href="/" class="logo">JS</a>
+      <ul>
+        <li><a href="https://jaswanth.dev">Portfolio</a></li>
+        <li><a href="/">Blog</a></li>
+        <li><a href="/categories.html">Categories</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+      <div class="auth-section">
+        <span id="user-info" style="display:none;"></span>
+        <button id="auth-btn" class="btn btn-small">Sign In</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <a href="/" class="back-link">← Back to blog</a>
+    
+    <article class="admin-page">
+      <h1 id="admin-title">Create New Post</h1>
+      
+      <div id="auth-required" class="auth-notice">
+        <p>You must sign in as admin to access this page.</p>
+        <button onclick="signInWithGoogle()" class="btn btn-primary">Sign In with Google</button>
+      </div>
+      
+      <div id="not-admin" class="auth-notice" style="display:none;">
+        <p>Access denied. Only the admin can create or edit posts.</p>
+        <p>Signed in as: <span id="current-email"></span></p>
+        <a href="/" class="btn btn-secondary">Go to Blog</a>
+      </div>
+      
+      <form id="blog-form" class="blog-form" style="display:none;">
+        <div class="form-group">
+          <label for="blog-title">Title *</label>
+          <input type="text" id="blog-title" name="title" required placeholder="Enter blog title">
+        </div>
+        
+        <div class="form-group">
+          <label for="blog-excerpt">Excerpt</label>
+          <textarea id="blog-excerpt" name="excerpt" rows="2" placeholder="Brief description for the listing page"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="blog-category">Category *</label>
+          <select id="blog-category" name="category" required>
+            <option value="">Select a category</option>
+          </select>
+          <small>Don't see your category? <a href="/categories.html">Add one here</a></small>
+        </div>
+        
+        <div class="form-group editor-group">
+          <label for="blog-content">Content * (Markdown supported)</label>
+          
+          <div class="editor-toolbar">
+            <button type="button" class="toolbar-btn" data-action="bold" title="Bold (Ctrl+B)">
+              <strong>B</strong>
+            </button>
+            <button type="button" class="toolbar-btn" data-action="italic" title="Italic (Ctrl+I)">
+              <em>I</em>
+            </button>
+            <button type="button" class="toolbar-btn" data-action="heading" title="Heading">
+              H
+            </button>
+            <span class="toolbar-divider"></span>
+            <button type="button" class="toolbar-btn" data-action="link" title="Link">
+              🔗
+            </button>
+            <button type="button" class="toolbar-btn" data-action="image" title="Image">
+              🖼️
+            </button>
+            <button type="button" class="toolbar-btn" data-action="code" title="Inline Code">
+              <code>&lt;/&gt;</code>
+            </button>
+            <button type="button" class="toolbar-btn" data-action="codeblock" title="Code Block">
+              { }
+            </button>
+            <span class="toolbar-divider"></span>
+            <button type="button" class="toolbar-btn" data-action="ul" title="Bullet List">
+              • ―
+            </button>
+            <button type="button" class="toolbar-btn" data-action="ol" title="Numbered List">
+              1. ―
+            </button>
+            <button type="button" class="toolbar-btn" data-action="quote" title="Blockquote">
+              ❝
+            </button>
+            <button type="button" class="toolbar-btn" data-action="hr" title="Horizontal Rule">
+              ―
+            </button>
+            <span class="toolbar-divider"></span>
+            <button type="button" class="toolbar-btn preview-toggle" data-action="preview" title="Toggle Preview">
+              👁️ Preview
+            </button>
+          </div>
+          
+          <div class="editor-container">
+            <textarea id="blog-content" name="content" required placeholder="Start writing your blog post..."></textarea>
+            <div id="content-preview" class="editor-preview">
+              <div id="preview-content" class="post-content"></div>
+            </div>
+          </div>
+          
+          <div class="editor-footer">
+            <span class="char-count"><span id="word-count">0</span> words</span>
+            <span class="editor-hint">Markdown supported • Tab to indent</span>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submit-btn">Publish Post</button>
+          <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
+        </div>
+        
+        <input type="hidden" id="blog-id" name="id">
+      </form>
+    </article>
+  </main>
+
+  <footer>
+    <p>
+      <a href="https://github.com/Jassu-Jaswanth">GitHub</a> · 
+      <a href="https://linkedin.com/in/jaswanth-suvvari">LinkedIn</a> · 
+      <a href="mailto:jaswanth.suvvari@devilgamer.in">Email</a>
+    </p>
+    <p><small>© 2025 Jaswanth Suvvari</small></p>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module">
+    import { firebaseConfig, ADMIN_EMAIL } from './firebase-config.js';
+    
+    // Initialize Firebase (in case app.js hasn't loaded yet)
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    
+    let editMode = false;
+    let editBlogId = null;
+    
+    // Check for edit mode
+    const params = new URLSearchParams(window.location.search);
+    editBlogId = params.get('edit');
+    editMode = !!editBlogId;
+    
+    // Auth state handler
+    auth.onAuthStateChanged(async (user) => {
+      const authRequired = document.getElementById('auth-required');
+      const notAdmin = document.getElementById('not-admin');
+      const blogForm = document.getElementById('blog-form');
+      const adminTitle = document.getElementById('admin-title');
+      
+      if (!user) {
+        authRequired.style.display = 'block';
+        notAdmin.style.display = 'none';
+        blogForm.style.display = 'none';
+        return;
+      }
+      
+      if (user.email !== ADMIN_EMAIL) {
+        authRequired.style.display = 'none';
+        notAdmin.style.display = 'block';
+        blogForm.style.display = 'none';
+        document.getElementById('current-email').textContent = user.email;
+        return;
+      }
+      
+      // User is admin
+      authRequired.style.display = 'none';
+      notAdmin.style.display = 'none';
+      blogForm.style.display = 'block';
+      
+      // Load categories
+      await loadCategories();
+      
+      // If edit mode, load the blog
+      if (editMode) {
+        adminTitle.textContent = 'Edit Post';
+        document.getElementById('submit-btn').textContent = 'Update Post';
+        await loadBlogForEdit(editBlogId);
+      }
+    });
+    
+    // Load categories into select
+    async function loadCategories() {
+      const select = document.getElementById('blog-category');
+      const snapshot = await db.collection('categories').orderBy('name').get();
+      
+      snapshot.docs.forEach(doc => {
+        const cat = doc.data();
+        const option = document.createElement('option');
+        option.value = cat.name;
+        option.textContent = cat.name;
+        select.appendChild(option);
+      });
+    }
+    
+    // Load blog for editing
+    async function loadBlogForEdit(id) {
+      const doc = await db.collection('blogs').doc(id).get();
+      if (!doc.exists) {
+        alert('Blog not found');
+        location.href = '/';
+        return;
+      }
+      
+      const blog = doc.data();
+      document.getElementById('blog-id').value = id;
+      document.getElementById('blog-title').value = blog.title || '';
+      document.getElementById('blog-excerpt').value = blog.excerpt || '';
+      document.getElementById('blog-category').value = blog.category || '';
+      document.getElementById('blog-content').value = blog.content || '';
+    }
+    
+    const textarea = document.getElementById('blog-content');
+    const preview = document.getElementById('content-preview');
+    const previewContent = document.getElementById('preview-content');
+    const wordCount = document.getElementById('word-count');
+    let previewVisible = false;
+    
+    // Toolbar actions
+    const toolbarActions = {
+      bold: () => wrapSelection('**', '**'),
+      italic: () => wrapSelection('*', '*'),
+      heading: () => insertAtLineStart('## '),
+      link: () => wrapSelection('[', '](url)'),
+      image: () => insertText('![alt text](image-url)'),
+      code: () => wrapSelection('`', '`'),
+      codeblock: () => wrapSelection('\n```\n', '\n```\n'),
+      ul: () => insertAtLineStart('- '),
+      ol: () => insertAtLineStart('1. '),
+      quote: () => insertAtLineStart('> '),
+      hr: () => insertText('\n---\n'),
+      preview: () => togglePreview()
+    };
+    
+    function wrapSelection(before, after) {
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+      const selected = text.substring(start, end) || 'text';
+      textarea.value = text.substring(0, start) + before + selected + after + text.substring(end);
+      textarea.focus();
+      textarea.setSelectionRange(start + before.length, start + before.length + selected.length);
+      updatePreview();
+      updateWordCount();
+    }
+    
+    function insertText(text) {
+      const start = textarea.selectionStart;
+      const value = textarea.value;
+      textarea.value = value.substring(0, start) + text + value.substring(start);
+      textarea.focus();
+      textarea.setSelectionRange(start + text.length, start + text.length);
+      updatePreview();
+      updateWordCount();
+    }
+    
+    function insertAtLineStart(prefix) {
+      const start = textarea.selectionStart;
+      const value = textarea.value;
+      const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+      textarea.value = value.substring(0, lineStart) + prefix + value.substring(lineStart);
+      textarea.focus();
+      textarea.setSelectionRange(start + prefix.length, start + prefix.length);
+      updatePreview();
+      updateWordCount();
+    }
+    
+    function togglePreview() {
+      previewVisible = !previewVisible;
+      preview.classList.toggle('visible', previewVisible);
+      document.querySelector('.preview-toggle').classList.toggle('active', previewVisible);
+      if (previewVisible) updatePreview();
+    }
+    
+    async function updatePreview() {
+      previewContent.innerHTML = marked.parse(textarea.value || '*Start typing to see preview...*');
+      // Render Mermaid diagrams in preview
+      if (typeof mermaid !== 'undefined' && window.renderMermaid) {
+        await window.renderMermaid();
+      }
+    }
+    
+    function updateWordCount() {
+      const words = textarea.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+      wordCount.textContent = words;
+    }
+    
+    // Toolbar click handlers
+    document.querySelectorAll('.toolbar-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        if (toolbarActions[action]) toolbarActions[action]();
+      });
+    });
+    
+    // Update on input
+    textarea.addEventListener('input', () => {
+      if (previewVisible) updatePreview();
+      updateWordCount();
+    });
+    
+    // Tab key support
+    textarea.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        insertText('  ');
+      }
+      // Keyboard shortcuts
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === 'b') { e.preventDefault(); toolbarActions.bold(); }
+        if (e.key === 'i') { e.preventDefault(); toolbarActions.italic(); }
+      }
+    });
+    
+    // Form submission
+    document.getElementById('blog-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = editMode ? 'Updating...' : 'Publishing...';
+      
+      const blogData = {
+        title: document.getElementById('blog-title').value.trim(),
+        excerpt: document.getElementById('blog-excerpt').value.trim(),
+        category: document.getElementById('blog-category').value,
+        content: document.getElementById('blog-content').value,
+        contentHtml: marked.parse(document.getElementById('blog-content').value)
+      };
+      
+      try {
+        if (editMode) {
+          await window.updateBlog(editBlogId, blogData);
+        } else {
+          await window.createBlog(blogData);
+        }
+        location.href = '/';
+      } catch (error) {
+        console.error('Error saving blog:', error);
+        alert('Failed to save blog. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = editMode ? 'Update Post' : 'Publish Post';
+      }
+    });
+  </script>
+</body>
+</html>
