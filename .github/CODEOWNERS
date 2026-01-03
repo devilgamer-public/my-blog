@@ -1,0 +1,10 @@
+# CODEOWNERS file for my-blog
+# These owners will be requested for review when someone opens a pull request
+
+# Default owner for everything in the repo
+* @Jassu-Jaswanth
+
+# Specific paths (optional - uncomment if needed)
+# /admin.html @Jassu-Jaswanth
+# /firebase-config.js @Jassu-Jaswanth
+# /firestore.rules @Jassu-Jaswanth
